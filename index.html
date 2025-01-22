@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exportar Texto para Arquivo</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column; /* Muda a direção para coluna */
+            align-items: center; /* Centraliza os itens */
+        }
+        .header {
+            background-color: purple; /* Cor de fundo roxa */
+            color: white; /* Cor do texto */
+            width: 100%; /* Largura total da tela */
+            text-align: center; /* Centraliza o texto */
+            padding: 10px 0; /* Espaçamento em cima e embaixo */
+            margin-bottom: 20px; /* Espaço abaixo da barra */
+        }
+        .container {
+            margin-bottom: 20px; /* Adiciona espaço entre a caixa de texto e a prévia */
+            display: none; /* Inicialmente escondido */
+        }
+        .preview {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 100%; /* Faz a largura ocupar 100% do container */
+            height: 300px; /* Aumenta a altura da prévia */
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">tnafp creator v2</div> <!-- Barra roxa com o título -->
+
+    <button id="criarProjetoBtn">Criar Projeto</button> <!-- Botão para criar projeto -->
+
+    <div class="container" id="projectContainer">
+        <h1>Escreva algo e baixe como arquivo</h1>
+        <textarea id="texto" rows="10" cols="30"><!DOCTYPE html>
+<html lang="en">
+<head>
+  <title></title>
+</head>
+
+<body>
+
+  <script></script>
+</body>
+</html></textarea><br>
+        <button id="enviarBtn">Enviar e Baixar</button>
+        <button id="previewBtn">Prévia</button>
+    </div>
+
+    <div class="preview" id="previewArea">
+        <iframe id="previewIframe"></iframe> <!-- Adicionando um iframe para a prévia -->
+    </div>
+
+    <script>
+        document.getElementById('criarProjetoBtn').addEventListener('click', function() {
+            document.getElementById('projectContainer').style.display = 'block'; // Mostra o container
+            this.style.display = 'none'; // Esconde o botão "Criar Projeto"
+        });
+
+        document.getElementById('enviarBtn').addEventListener('click', function() {
+            const content = document.getElementById('texto').value;
+            const filename = "meu_app.html";
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            document.getElementById('texto').value = '';
+        });
+
+        document.getElementById('previewBtn').addEventListener('click', function() {
+            const content = document.getElementById('texto').value;
+
+            // Prepara o conteúdo HTML para ser exibido no iframe
+            const iframe = document.getElementById('previewIframe');
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+            iframeDoc.open();
+            iframeDoc.write(content);
+            iframeDoc.close(); // Fecha o documento para renderizar
+        });
+    </script>
+</body>
+</html>
